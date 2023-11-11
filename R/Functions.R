@@ -44,3 +44,8 @@ Proximity_standardize = function(proximity) {
   proximity = (proximity / rowSums_vector)
   return(proximity)
 }
+
+Simulating_CAR = function(proximity) {
+  standardized_proximity = Proximity_standardize(proximity)
+
+}
