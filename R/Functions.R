@@ -22,18 +22,16 @@ Proximity_check = function(proximity) {
     stop("Your proximity matrix should have all diagonal entries equal to 0. For
     further aid towards construction of the proximity matrix, refer to the
     package description.")
+  }
   # Checking matrix is symmetric (5)
   if(!isSymmetric(proximity)) {
-    stop("Your proximity matrix should be symmetric. For further aid towards construction of the proximity matrix,
-    refer to the package description.")
+    stop("Your proximity matrix should be symmetric. For further aid towards
+    construction of the proximity matrix, refer to the package description.")
   }
   # Checking matrix has all rowSums > 0. (No check for colSums since symmetric (6)
   if(!all(rowSums(proximity) > 0)){
     stop("Your proximity matrix should have at least one conditional dependance
     for each row. For further aid towards construction of the proximity matrix,
     refer to the package description.")
-  }
-
-
   }
 }
