@@ -1,6 +1,6 @@
 test_that("Proximity_setup handles matrices correctly", {
   # Test 1 : (Given invalid matrix , nrow(proximity) != ncol(proximity))
-  proximity1 = matrix(c(0,1,1,1,0,1), nrow = 2)
+  proximity1 = matrix(c(0,1,1,1,0,1), nrow = 2, byrow = TRUE)
   expect_error(Proximity_check(proximity1))
 
   # Test 2 : (Given invalid matrix , some value not equal to (0 or 1))
@@ -8,7 +8,7 @@ test_that("Proximity_setup handles matrices correctly", {
   expect_error(Proximity_check(proximity2))
 
   # Test 3 : (Given invalid matrix , some diagonal value not equal to 0)
-  proximity3 = matrix(c(1,1,1,1), nrow = 2)
+  proximity3 = matrix(c(1,1,1,1), nrow = 2, byrow = TRUE)
   expect_error(Proximity_check(proximity3))
 
   # Test 4 : (Given invalid matrix , matrix not symmetric)
