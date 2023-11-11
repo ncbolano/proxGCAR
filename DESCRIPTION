@@ -1,9 +1,9 @@
 Package: proxGCAR
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Gaussian Conditional Autoregressive MLE
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Author: Noah Bolanos
+Maintainer: <ncbolano@tamu.edu>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: GPL (>= 3)
