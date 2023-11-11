@@ -37,5 +37,10 @@ Proximity_check = function(proximity) {
 }
 
 Proximity_standardize = function(proximity) {
-  rowSums(proximity)
+  # Obtains the rowSums of the matrix and saves them as a vector
+  rowSums_vector = rowSums(proximity)
+
+  # Used element wise division to efficiently compute this standardized matrix
+  proximity = (proximity / rowSums_vector)
+  return(proximity)
 }
