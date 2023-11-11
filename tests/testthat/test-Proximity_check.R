@@ -14,4 +14,13 @@ test_that("Proximity_setup handles matrices correctly", {
   # Test 4 : (Given invalid matrix , some diagonal value not equal to 0)
   proximity4 = matrix(c(1,1,1,1), nrow = 2)
   expect_error(Proximity_check(proximity4))
+
+  # Test 5 : (Given invalid matrix , matrix not symmetric)
+  proximity5 = matrix(c(0,0,1,1,0,0,1,0,0), nrow = 3)
+  expect_error(Proximity_check(proximity5))
+
+  # Test 6 : (Given invalid matrix , one or more rowSum has value = 0)
+  proximity6 = matrix(c(0,0,1,0,0,0,1,0,0), nrow = 3)
+  expect_error(Proximity_check(proximity6))
+
 })
