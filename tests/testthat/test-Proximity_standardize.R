@@ -26,4 +26,10 @@ test_that("Proximity_standardize standardizes each row in the proximity matrix c
                                nrow = 5, byrow = TRUE)
   expect_equal(resulting_matrix4, expected_matrix4)
 
+  # Test (5) (Providing a faulty expected matrix and expecting a failure)
+  proximity5 = matrix(c(0,0,1,0,0,1,1,1,0), nrow = 3, byrow = TRUE)
+  resulting_matrix5 = Proximity_standardize(proximity5)
+  expected_incorrect_matrix5 = matrix(c(0,0,1/2,0,0,1/2,1/2,1/2,0))
+  # We expect this test to fail since our provided expected matrix is incorrect
+  expect_equal(resulting_matrix5, expected_incorrect_matrix5)
 })
