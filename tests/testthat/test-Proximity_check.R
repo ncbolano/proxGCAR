@@ -19,8 +19,8 @@ test_that("Proximity_setup handles matrices correctly", {
   proximity5 = matrix(c(0,0,1,1,0,0,1,0,0), nrow = 3)
   expect_error(Proximity_check(proximity5))
 
-  # Test 6 : (Given invalid matrix , one or more rowSum has value = 0)
+  # Test 6 : (Given invalid matrix , one or more rowSums has value = 0)
+  # Also prevents an empty matrix from passing checking tests
   proximity6 = matrix(c(0,0,1,0,0,0,1,0,0), nrow = 3)
   expect_error(Proximity_check(proximity6))
-
 })
