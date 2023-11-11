@@ -35,3 +35,7 @@ Proximity_check = function(proximity) {
     refer to the package description.")
   }
 }
+
+Proximity_standardize = function(proximity) {
+  rowSums(proximity)
+}
