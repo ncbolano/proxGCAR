@@ -3,7 +3,7 @@
 #   Install Package:           'Ctrl + Shift + B'
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
-
+usethis::use_package("MASS", type = "Imports")
 Proximity_check = function(proximity) {
   # Checking matrix is square (1)
   if(nrow(proximity) != ncol(proximity)) {
@@ -45,7 +45,22 @@ Proximity_standardize = function(proximity) {
   return(proximity)
 }
 
-Simulating_CAR = function(proximity) {
+MASS::
+Simulating_CAR = function(X,proximity) {
+  I = diag(nrow(x))
   standardized_proximity = Proximity_standardize(proximity)
+  p = .5
+  t = 2
+  n = 100
+  mu = 0
+  D = (t^2) *()
+  Sigma = ((I - (p*standardized_proximity))^-1)*((t^2)
+  mvrnorm(n, mu = mu, Sigma = Sigma)
+}
+
+Log_Likelihood = function(tau, n, ) {
+  standardized_proximity = Proximity_standardize(proximity)
+  -2 * log(tau) + log(abs(diag(n) - (rho * standardized_proximity))) -
+    ((tau)^-2)*(sum)
 
 }
