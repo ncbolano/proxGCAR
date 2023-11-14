@@ -44,7 +44,7 @@ Proximity_standardize = function(proximity) {
   proximity = (proximity / rowSums_vector)
   return(proximity)
 }
-
+Data_check
 Simulating_CAR = function(proximity) {
   standardized_proximity = Proximity_standardize(proximity)
   I = diag(nrow(standardized_proximity))
@@ -58,23 +58,19 @@ Simulating_CAR = function(proximity) {
   mvrnorm_data = mvrnorm(n, mu = mu, Sigma = Sigma)
   return(mvrnorm_data)
 }
-standardized_proximity = Proximity_standardize(proximity6)
-I = diag(nrow(standardized_proximity))
-rowSums_vector = rowSums(proximity6)
-t = 2
-D = (t^2) *(diag(rowSums_vector))
-n = 100
-mu = 0
-p = .5
-Sigma = ((I - (p*standardized_proximity))^-1)*(D)
-mvrnorm(n, mu = mu, Sigma = Sigma)
-proximity6 = matrix(c(0,1,1,0), nrow = 2, byrow = TRUE)
-Simulating_CAR(proximity6)
-?mvrnorm
-
-Log_Likelihood = function(tau, n, ) {
-  standardized_proximity = Proximity_standardize(proximity)
-  -2 * log(tau) + log(abs(diag(n) - (rho * standardized_proximity))) -
-    ((tau)^-2)*(sum)
-
+summation_term_LL = function(Y,rho,proximity) {
+  for (k in 1:nrow(Y)) # Observation amount {
+    for (i in 1:ncol(Y)) {
+      for (j in 1:ncol(Y)) {
+        sum((Y[k,i]) - rho * sum(proximity[i,j] * Y[k,j]) * Y[k,i] * rowSums(proximity[i]))
+      }
+    }
 }
+
+Log_likelihood = function(tau, rho, Y, proximity) {
+  standardized_proximity = Proximity_standardize(proximity)
+  LL = (-2 * log(tau)) + log(det(diag(n) - (rho * standardized_proximity))) -
+    ((tau)^-2)*(
+}
+
+
