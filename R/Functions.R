@@ -3,7 +3,7 @@
 #   Install Package:           'Ctrl + Shift + B'
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
-usethis::use_package("MASS", type = "Imports")
+
 Proximity_check = function(proximity) {
   # Checking matrix is square (1)
   if(nrow(proximity) != ncol(proximity)) {
@@ -45,18 +45,32 @@ Proximity_standardize = function(proximity) {
   return(proximity)
 }
 
-MASS::
-Simulating_CAR = function(X,proximity) {
-  I = diag(nrow(x))
+Simulating_CAR = function(proximity) {
   standardized_proximity = Proximity_standardize(proximity)
-  p = .5
+  I = diag(nrow(standardized_proximity))
+  rowSums_vector = rowSums(proximity)
   t = 2
+  D = (t^2) *(diag(rowSums_vector))
   n = 100
   mu = 0
-  D = (t^2) *()
-  Sigma = ((I - (p*standardized_proximity))^-1)*((t^2)
-  mvrnorm(n, mu = mu, Sigma = Sigma)
+  p = .5
+  Sigma = ((I - (p*standardized_proximity))^-1)*(D)
+  mvrnorm_data = mvrnorm(n, mu = mu, Sigma = Sigma)
+  return(mvrnorm_data)
 }
+standardized_proximity = Proximity_standardize(proximity6)
+I = diag(nrow(standardized_proximity))
+rowSums_vector = rowSums(proximity6)
+t = 2
+D = (t^2) *(diag(rowSums_vector))
+n = 100
+mu = 0
+p = .5
+Sigma = ((I - (p*standardized_proximity))^-1)*(D)
+mvrnorm(n, mu = mu, Sigma = Sigma)
+proximity6 = matrix(c(0,1,1,0), nrow = 2, byrow = TRUE)
+Simulating_CAR(proximity6)
+?mvrnorm
 
 Log_Likelihood = function(tau, n, ) {
   standardized_proximity = Proximity_standardize(proximity)
