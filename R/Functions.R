@@ -54,10 +54,13 @@ Simulating_CAR = function(proximity) {
   return(mvrnorm_data)
 }
 
-Calculate_sigma_matrix = function(rho,tau,proximity){
+Calculate_sigma_matrix = function(proximity,p,t){
   standardized_proximity = Proximity_standardize(proximity)
-
-  sigma_inv
+  I = diag(nrow(proximity))
+  rowSums_vector = rowSums(proximity)
+  sigma_inv = t^-2 * diag(rowSums_vector) %*% (I - p * standardized_proximity) # By remark 4.3.2
+  sigma = solve(sigma_inv)
+  return(sigma)
 }
 #Log_likelihood = function(tau, rho, Y, proximity) {
   #standardized_proximity = Proximity_standardize(proximity)
