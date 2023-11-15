@@ -62,6 +62,11 @@ Calculate_sigma_matrix = function(proximity,p,t){
   sigma = solve(sigma_inv)
   return(sigma)
 }
+
+Calculate_Yt_Sigma_Y = function(Y,proximity,p,t) {
+  Sigma = Calculate_sigma_matrix(proximity,p,t)
+  Yt_sigma_Y = (Y) * Sigma * Y
+}
 #Log_likelihood = function(tau, rho, Y, proximity) {
   #standardized_proximity = Proximity_standardize(proximity)
   #LL = (-2 * log(tau)) + log(det(diag(n) - (rho * standardized_proximity))) -
