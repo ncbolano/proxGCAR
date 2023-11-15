@@ -54,6 +54,8 @@ Simulating_CAR = function(proximity) {
   return(mvrnorm_data)
 }
 
+Calculate_mu = function(proximity,p)
+
 Calculate_sigma_matrix = function(proximity,p,t){
   standardized_proximity = Proximity_standardize(proximity)
   I = diag(nrow(proximity))
@@ -63,16 +65,25 @@ Calculate_sigma_matrix = function(proximity,p,t){
   return(sigma)
 }
 
-Calculate_Yt_Sigma_Y = function(Y,proximity,p,t) {
+Calculate_Yt_Sigma_Y = function(Y,proximity,p,t,mu) {
   Sigma = Calculate_sigma_matrix(proximity,p,t)
-  Yt_sigma_Y = (Y) * Sigma * Y
+  Yt_Sigma_Y = t((Y - mu)) * Sigma * (Y - mu)
+  return(Yt_Sigma_Y)
 }
-#Log_likelihood = function(tau, rho, Y, proximity) {
-  #standardized_proximity = Proximity_standardize(proximity)
-  #LL = (-2 * log(tau)) + log(det(diag(n) - (rho * standardized_proximity))) -
-    #((tau)^-2)*(
-#}
+
+Calculate_log_term = function(Y,proximity,p,t) {
+  Sigma = Calculate_sigma_matrix
+  log_term = log(det(Sigma))
+  returN(log_term)
+}
+
+Log_Likelihood = function(Y,proximity,p,t,mu) {
+
+  -1 * (log_term +
+}
+
 
 # ------ newer section
 
 
+?nlm()
