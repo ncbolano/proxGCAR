@@ -49,28 +49,22 @@ Simulating_CAR = function(proximity) {
   standardized_proximity = Proximity_standardize(proximity)
   I = diag(nrow(standardized_proximity))
   rowSums_vector = rowSums(proximity)
-  t = 2
-  D = (t^2) *(diag(rowSums_vector))
-  n = 100
-  mu = 0
-  p = .5
   Sigma = ((I - (p*standardized_proximity))^-1)*(D)
   mvrnorm_data = mvrnorm(n, mu = mu, Sigma = Sigma)
   return(mvrnorm_data)
 }
-summation_term_LL = function(Y,rho,proximity) {
-  for (k in 1:nrow(Y)) # Observation amount {
-    for (i in 1:ncol(Y)) {
-      for (j in 1:ncol(Y)) {
-        rho_term[i] = proximity[i,j] * Y[k,j]
-      }
-    }
-}
-sum((Y[k,i]) - rho * sum(proximity[i,j] * Y[k,j]) * Y[k,i] * rowSums(proximity[i]))
-Log_likelihood = function(tau, rho, Y, proximity) {
+
+Calculate_sigma_matrix = function(rho,tau,proximity){
   standardized_proximity = Proximity_standardize(proximity)
-  LL = (-2 * log(tau)) + log(det(diag(n) - (rho * standardized_proximity))) -
-    ((tau)^-2)*(
+
+  sigma_inv
 }
+#Log_likelihood = function(tau, rho, Y, proximity) {
+  #standardized_proximity = Proximity_standardize(proximity)
+  #LL = (-2 * log(tau)) + log(det(diag(n) - (rho * standardized_proximity))) -
+    #((tau)^-2)*(
+#}
+
+# ------ newer section
 
 
