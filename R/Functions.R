@@ -53,7 +53,7 @@ Calculate_initial_p = function(Y,proximity) {
   standardized_proximity = Proximity_standardize(proximity)
   p = 0
   learning_rate = .01
-  iterations = 100)
+  iterations = 100
   for (i in 1:iterations) {
     sum = standardized_proximity %*% Y
     derivative = -2 * t(Y - (p * sum)) %*% sum
@@ -63,7 +63,7 @@ Calculate_initial_p = function(Y,proximity) {
   return(p)
 }
 
-Calculate_mu = function(Y,proximity,p) {
+Calculate_mu = function(Y,proximity) {
   standardized_proximity = Proximity_standardize(proximity)
   p = Calculate_initial_p(Y,proximity, learning_rate = .01, iterations = 100)
   mu = p * ((standardized_proximity) %*% Y)
@@ -80,29 +80,33 @@ Calculate_initial_tau = function(Y, proximity){
   return(tau)
 }
 
-Calculate_sigma_matrix = function(proximity,p,tau){
+Calculate_sigma_matrix = function(Y, proximity){
   standardized_proximity = Proximity_standardize(proximity)
-  I = diag(nrow(proximity))
   rowSums_vector = rowSums(proximity)
+  I = diag(nrow(proximity))
+  p = Calculate_initial_p(Y,proximity)
+  tau = Calculate_initial_tau(Y,proximity)
   sigma_inv = tau^-2 * diag(rowSums_vector) %*% (I - p * standardized_proximity) # By remark 4.3.2
   sigma = solve(sigma_inv)
   return(sigma)
 }
 
-Calculate_Yt_Sigma_Y = function(Y,proximity) {
-  Sigma = Calculate_sigma_matrix(proximity,p,t)
-  p = Calculate_initial_p()
+Calculate_Yt_Sigma_Y = function(Y, proximity) {
+  p = Calculate_initial_p(Y, proximity)
+  mu = Calculate_mu(Y, proximity)
+  tau = Calculate_initial_tau(Y, proximity)
+  Sigma = Calculate_sigma_matrix(Y, proximity)
   Yt_Sigma_Y = t((Y - mu)) * Sigma * (Y - mu)
   return(Yt_Sigma_Y)
 }
 
-Calculate_log_term = function(Y,proximity,p,t) {
-  Sigma = Calculate_sigma_matrix
+Calculate_log_term = function(Y, proximity) {
+  Sigma = Calculate_sigma_matrix(Y, proximity)
   log_term = log(det(Sigma))
   return(log_term)
 }
 
-Log_Likelihood = function(Y,proximity,p,t,mu) {
+Log_Likelihood = function(Y, proximity) {
   log_term = Calculate_log_term(Y,proximity,p,t)
   Yt_Sigma_Y = Calculate_Yt_Sigma_Y(Y,proximity,p,t)
   -1 * (log_term + Yt_Sigma_Y)
