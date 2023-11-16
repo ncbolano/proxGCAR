@@ -79,7 +79,7 @@ Calculate_initial_tau = function(Y, proximity){
   rowSums_vector = rowSums(proximity)
   standardized_proximity = Proximity_standardize(proximity)
   p = Calculate_initial_p(Y,proximity, learning_rate = .01, iterations = 100)
-  mu = mu(Y,proximity,p)
+  mu = Calculate_mu(Y,proximity,p)
   tau = (1/nrow(Y)) * (t(rowSums_vector) * (Y - mu)^2)
   return(tau)
 }
