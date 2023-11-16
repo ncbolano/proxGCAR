@@ -65,7 +65,7 @@ Calculate_initial_p = function(Y,proximity) {
 
 Calculate_mu = function(Y,proximity) {
   standardized_proximity = Proximity_standardize(proximity)
-  p = Calculate_initial_p(Y,proximity, learning_rate = .01, iterations = 100)
+  p = Calculate_initial_p(Y,proximity)
   mu = p * ((standardized_proximity) %*% Y)
   return(mu)
 }
@@ -74,9 +74,10 @@ Calculate_initial_tau = function(Y, proximity){
   tau = 0
   rowSums_vector = rowSums(proximity)
   standardized_proximity = Proximity_standardize(proximity)
-  p = Calculate_initial_p(Y,proximity, learning_rate = .01, iterations = 100)
-  mu = Calculate_mu(Y,proximity,p)
-  tau = (1/length(Y)) * rowSums_vector * (Y - mu)^2
+  p = Calculate_initial_p(Y,proximity)
+  mu = Calculate_mu(Y,proximity)
+  tau_sq = (1/length(Y)) * sum(rowSums_vector * (Y - mu)^2)
+  tau = tau_sq ^ (1/2)
   return(tau)
 }
 
@@ -96,7 +97,7 @@ Calculate_Yt_Sigma_Y = function(Y, proximity) {
   mu = Calculate_mu(Y, proximity)
   tau = Calculate_initial_tau(Y, proximity)
   Sigma = Calculate_sigma_matrix(Y, proximity)
-  Yt_Sigma_Y = t((Y - mu)) * Sigma * (Y - mu)
+  Yt_Sigma_Y = t((Y - mu)) %*% Sigma %*% (Y - mu)
   return(Yt_Sigma_Y)
 }
 
@@ -106,14 +107,24 @@ Calculate_log_term = function(Y, proximity) {
   return(log_term)
 }
 
-Log_Likelihood = function(Y, proximity) {
-  log_term = Calculate_log_term(Y,proximity,p,t)
-  Yt_Sigma_Y = Calculate_Yt_Sigma_Y(Y,proximity,p,t)
-  -1 * (log_term + Yt_Sigma_Y)
+Negative_Log_Likelihood = function(Y, proximity) {
+  log_term = Calculate_log_term(Y, proximity)
+  Yt_Sigma_Y = Calculate_Yt_Sigma_Y(Y, proximity)
+  LL =  (log_term - Yt_Sigma_Y)
+  Negative_LL = -1 * LL
+  return(Negative_LL)
 }
-
 
 # ------ newer section
 
-Maximum_Likelihood = function()
-nlm()
+Maximum_Likelihood = function(Y, proximity) {
+  Negative_LL = Negative_Log_Likelihood(Y, proximity)
+  p = Calculate_initial_p(Y, proximity)
+  tau = Calculate_initial_tau(Y, proximity)
+  initial_parameters = c(p, tau)
+  nlm_output = nlm(Negative_LL, p = initial_parameters)
+  optimized_p_tau = nlm_output$estimate
+  return(optimized_p_tau)
+}
+
+
