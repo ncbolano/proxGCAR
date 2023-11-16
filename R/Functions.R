@@ -3,6 +3,8 @@
 #   Install Package:           'Ctrl + Shift + B'
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
+### Needs mvtnorm
+
 library(usethis)
 use_test()
 Proximity_check = function(proximity) {
@@ -47,9 +49,11 @@ Proximity_standardize = function(proximity) {
 }
 
 ### Might have to move learning rate and iterations inside of this function
-Calculate_initial_p = function(Y,proximity, learning_rate = .01, iterations = 100) {
+Calculate_initial_p = function(Y,proximity) {
   standardized_proximity = Proximity_standardize(proximity)
   p = 0
+  learning_rate = .01
+  iterations = 100)
   for (i in 1:iterations) {
     sum = standardized_proximity %*% Y
     derivative = -2 * t(Y - (p * sum)) %*% sum
@@ -75,7 +79,7 @@ Calculate_initial_tau = function(Y, proximity){
   tau = (1/length(Y)) * rowSums_vector * (Y - mu)^2
   return(tau)
 }
-as.vector(rowSums_vector)
+
 Calculate_sigma_matrix = function(proximity,p,tau){
   standardized_proximity = Proximity_standardize(proximity)
   I = diag(nrow(proximity))
@@ -85,8 +89,9 @@ Calculate_sigma_matrix = function(proximity,p,tau){
   return(sigma)
 }
 
-Calculate_Yt_Sigma_Y = function(Y,proximity,p,t,mu) {
+Calculate_Yt_Sigma_Y = function(Y,proximity) {
   Sigma = Calculate_sigma_matrix(proximity,p,t)
+  p = Calculate_initial_p()
   Yt_Sigma_Y = t((Y - mu)) * Sigma * (Y - mu)
   return(Yt_Sigma_Y)
 }
