@@ -70,9 +70,11 @@ Calculate_initial_p = function(Y,proximity, learning_rate = .01, iterations = 10
       }
     }
     derivative = -2 * sum((Y - p * sum) * sum)
-    p = p - learning_rate * derivative
+    p = p - (learning_rate * derivative)
   }
 }
+sum = standardized_proximity %*% Y
+
 
 Calculate_sigma_matrix = function(proximity,p,t){
   standardized_proximity = Proximity_standardize(proximity)
