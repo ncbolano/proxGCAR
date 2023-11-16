@@ -3,7 +3,8 @@
 #   Install Package:           'Ctrl + Shift + B'
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
-
+library(usethis)
+use_test()
 Proximity_check = function(proximity) {
   # Checking matrix is square (1)
   if(nrow(proximity) != ncol(proximity)) {
@@ -53,12 +54,7 @@ Simulating_CAR = function(proximity) {
   mvrnorm_data = mvrnorm(n, mu = mu, Sigma = Sigma)
   return(mvrnorm_data)
 }
-
-Calculate_mu = function(Y,proximity,p) {
-  standardized_proximity = Proximity_standardize(proximity)
-  p * ((standardized_proximity) %*% Y)
-}
-
+### Might have to move learning rate and iterations inside of this function
 Calculate_initial_p = function(Y,proximity, learning_rate = .01, iterations = 100) {
   standardized_proximity = Proximity_standardize(proximity)
   p = 0
@@ -71,9 +67,19 @@ Calculate_initial_p = function(Y,proximity, learning_rate = .01, iterations = 10
   return(p)
 }
 
-Calculate_initial_t = function(Y, proximity, tau){
-  tau = 0
-  p_init = Calculate_initial_p(Y,proximity, learning_rate = .01, iterations = 100)
+Calculate_mu = function(Y,proximity,p) {
+  standardized_proximity = Proximity_standardize(proximity)
+  p = Calculate_initial_p(Y,proximity, learning_rate = .01, iterations = 100)
+  mu = p * ((standardized_proximity) %*% Y)
+  return(mu)
+}
+
+Calculate_initial_tau = function(Y, proximity){
+  rowSums_vector = rowSums(proximity)
+  standardized_proximity = Proximity_standardize(proximity)
+  p = Calculate_initial_p(Y,mproximity, learning_rate = .01, iterations = 100)
+  mu = mu(Y,proximity,p)
+  tau = (1/nrow(Y)) * (t(rowSums_vector) * (Y - mu)^2)
 }
 Calculate_sigma_matrix = function(proximity,p,t){
   standardized_proximity = Proximity_standardize(proximity)
@@ -105,5 +111,5 @@ Log_Likelihood = function(Y,proximity,p,t,mu) {
 
 # ------ newer section
 
-
-?nlm()
+Maximum_Likelihood = function()
+nlm()
