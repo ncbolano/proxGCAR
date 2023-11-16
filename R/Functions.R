@@ -76,8 +76,7 @@ Calculate_initial_tau = function(Y, proximity){
   standardized_proximity = Proximity_standardize(proximity)
   p = Calculate_initial_p(Y,proximity)
   mu = Calculate_mu(Y,proximity)
-  tau_sq = (1/length(Y)) * sum(rowSums_vector * (Y - mu)^2)
-  tau = tau_sq ^ (1/2)
+  tau = sqrt((1/length(Y)) * sum(rowSums_vector * (Y - mu)^2))
   return(tau)
 }
 
@@ -87,9 +86,9 @@ Calculate_sigma_matrix = function(Y, proximity){
   I = diag(nrow(proximity))
   p = Calculate_initial_p(Y,proximity)
   tau = Calculate_initial_tau(Y,proximity)
-  sigma_inv = tau^-2 * diag(rowSums_vector) %*% (I - p * standardized_proximity) # By remark 4.3.2
-  sigma = solve(sigma_inv)
-  return(sigma)
+  Sigma_inv = tau^-2 * diag(rowSums_vector) %*% (I - (p * standardized_proximity)) # By remark 4.3.2
+  Sigma = solve(Sigma_inv)
+  return(Sigma)
 }
 
 Calculate_Yt_Sigma_Y = function(Y, proximity) {
@@ -108,8 +107,8 @@ Calculate_log_term = function(Y, proximity) {
 }
 
 Negative_Log_Likelihood = function(Y, proximity) {
-  log_term = Calculate_log_term(Y, proximity)
   Yt_Sigma_Y = Calculate_Yt_Sigma_Y(Y, proximity)
+  log_term = Calculate_log_term(Y, proximity)
   LL =  (log_term - Yt_Sigma_Y)
   Negative_LL = -1 * LL
   return(Negative_LL)
@@ -118,7 +117,14 @@ Negative_Log_Likelihood = function(Y, proximity) {
 # ------ newer section
 
 Maximum_Likelihood = function(Y, proximity) {
-  Negative_LL = Negative_Log_Likelihood(Y, proximity)
+  Negative_LL = function(parameters) {
+    p = parameters[1]
+    tau = parameters[2]
+    standardized_proximity = Proximity_standardize(proximity)
+    rowSums_vector = rowSums(proximity)
+    I = diag(nrow(proximity))
+    Negative_LL = log(det(solve(tau^-2 * diag(rowSums_vector) %*% (I - (p * standardized_proximity)))))
+  }
   p = Calculate_initial_p(Y, proximity)
   tau = Calculate_initial_tau(Y, proximity)
   initial_parameters = c(p, tau)
