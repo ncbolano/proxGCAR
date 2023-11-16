@@ -64,13 +64,17 @@ Calculate_initial_p = function(Y,proximity, learning_rate = .01, iterations = 10
   p = 0
   for (i in 1:iterations) {
     sum = standardized_proximity %*% Y
-    derivative = -2 * t(Y - sum) %*% sum
+    derivative = -2 * t(Y - (p * sum)) %*% sum
+    derivative = as.numeric(derivative)
     p = p - (learning_rate * derivative)
   }
+  return(p)
 }
 
-
-
+Calculate_initial_t = function(Y, proximity, tau){
+  tau = 0
+  p_init = Calculate_initial_p(Y,proximity, learning_rate = .01, iterations = 100)
+}
 Calculate_sigma_matrix = function(proximity,p,t){
   standardized_proximity = Proximity_standardize(proximity)
   I = diag(nrow(proximity))
