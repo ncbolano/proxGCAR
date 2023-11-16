@@ -46,14 +46,6 @@ Proximity_standardize = function(proximity) {
   return(proximity)
 }
 
-Simulating_CAR = function(proximity) {
-  standardized_proximity = Proximity_standardize(proximity)
-  I = diag(nrow(standardized_proximity))
-  rowSums_vector = rowSums(proximity)
-  Sigma = ((I - (p*standardized_proximity))^-1)*(D)
-  mvrnorm_data = mvrnorm(n, mu = mu, Sigma = Sigma)
-  return(mvrnorm_data)
-}
 ### Might have to move learning rate and iterations inside of this function
 Calculate_initial_p = function(Y,proximity, learning_rate = .01, iterations = 100) {
   standardized_proximity = Proximity_standardize(proximity)
@@ -77,10 +69,11 @@ Calculate_mu = function(Y,proximity,p) {
 Calculate_initial_tau = function(Y, proximity){
   tau = 0
   rowSums_vector = rowSums(proximity)
+  as.vector
   standardized_proximity = Proximity_standardize(proximity)
   p = Calculate_initial_p(Y,proximity, learning_rate = .01, iterations = 100)
   mu = Calculate_mu(Y,proximity,p)
-  tau = (1/nrow(Y)) * (t(rowSums_vector) * (Y - mu)^2)
+  tau = (1/nrow(Y)) * rowSums_vector * (Y - mu)^2
   return(tau)
 }
 Calculate_sigma_matrix = function(proximity,p,t){
