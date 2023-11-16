@@ -69,18 +69,18 @@ Calculate_mu = function(Y,proximity,p) {
 Calculate_initial_tau = function(Y, proximity){
   tau = 0
   rowSums_vector = rowSums(proximity)
-  as.vector
   standardized_proximity = Proximity_standardize(proximity)
   p = Calculate_initial_p(Y,proximity, learning_rate = .01, iterations = 100)
   mu = Calculate_mu(Y,proximity,p)
-  tau = (1/nrow(Y)) * rowSums_vector * (Y - mu)^2
+  tau = (1/length(Y)) * rowSums_vector * (Y - mu)^2
   return(tau)
 }
-Calculate_sigma_matrix = function(proximity,p,t){
+as.vector(rowSums_vector)
+Calculate_sigma_matrix = function(proximity,p,tau){
   standardized_proximity = Proximity_standardize(proximity)
   I = diag(nrow(proximity))
   rowSums_vector = rowSums(proximity)
-  sigma_inv = t^-2 * diag(rowSums_vector) %*% (I - p * standardized_proximity) # By remark 4.3.2
+  sigma_inv = tau^-2 * diag(rowSums_vector) %*% (I - p * standardized_proximity) # By remark 4.3.2
   sigma = solve(sigma_inv)
   return(sigma)
 }
