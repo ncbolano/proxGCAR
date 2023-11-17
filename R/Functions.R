@@ -5,8 +5,6 @@
 #   Test Package:              'Ctrl + Shift + T'
 ### Needs mvtnorm
 
-library(usethis)
-use_test()
 Proximity_check = function(proximity) {
   # Checking matrix is square (1)
   if(nrow(proximity) != ncol(proximity)) {
@@ -123,14 +121,14 @@ Maximum_Likelihood = function(Y, proximity) {
     standardized_proximity = Proximity_standardize(proximity)
     rowSums_vector = rowSums(proximity)
     I = diag(nrow(proximity))
-    Negative_LL = log(det(solve(tau^-2 * diag(rowSums_vector) %*% (I - (p * standardized_proximity)))))
+    return(log(det(solve(tau^-2 * diag(rowSums_vector) %*% (I - (p * standardized_proximity))))))
   }
   p = Calculate_initial_p(Y, proximity)
   tau = Calculate_initial_tau(Y, proximity)
-  initial_parameters = c(p, tau)
-  nlm_output = nlm(Negative_LL, p = initial_parameters)
+  parameters = c(p, tau)
+  nlm_output = nlm(Negative_LL, p = parameters)
   optimized_p_tau = nlm_output$estimate
   return(optimized_p_tau)
 }
 
-
+?nlm
