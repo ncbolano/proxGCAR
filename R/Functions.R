@@ -113,22 +113,24 @@ Negative_Log_Likelihood = function(Y, proximity) {
 }
 
 # ------ newer section
+Negative_Likelihood = function(parameters, Y, proximity) {
+  p = parameters[1]
+  tau = parameters[2]
+  standardized_proximity = Proximity_standardize(proximity)
+  rowSums_vector = rowSums(proximity)
+  I = diag(nrow(proximity))
+  equation = (log(det(solve(tau^-2 * diag(rowSums_vector) %*% (I - (p * standardized_proximity))))))
+  return(equation)
+}
 
 Maximum_Likelihood = function(Y, proximity) {
-  Negative_LL = function(parameters) {
-    p = parameters[1]
-    tau = parameters[2]
-    standardized_proximity = Proximity_standardize(proximity)
-    rowSums_vector = rowSums(proximity)
-    I = diag(nrow(proximity))
-    return(log(det(solve(tau^-2 * diag(rowSums_vector) %*% (I - (p * standardized_proximity))))))
-  }
   p = Calculate_initial_p(Y, proximity)
   tau = Calculate_initial_tau(Y, proximity)
   parameters = c(p, tau)
+  Negative_LL = Negative_Likelihood(parameters,Y,proximity)
   nlm_output = nlm(Negative_LL, p = parameters)
   optimized_p_tau = nlm_output$estimate
   return(optimized_p_tau)
 }
-
 ?nlm
+
