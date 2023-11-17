@@ -46,7 +46,6 @@ Proximity_standardize = function(proximity) {
   return(proximity)
 }
 
-### Might have to move learning rate and iterations inside of this function
 Calculate_initial_p = function(Y,proximity) {
   standardized_proximity = Proximity_standardize(proximity)
   p = 0
@@ -100,7 +99,7 @@ Calculate_Yt_Sigma_Y = function(Y, proximity) {
 
 Calculate_log_term = function(Y, proximity) {
   Sigma = Calculate_sigma_matrix(Y, proximity)
-  log_term = log(det(Sigma))
+  log_term = log(abs(det(Sigma)))
   return(log_term)
 }
 
@@ -113,24 +112,28 @@ Negative_Log_Likelihood = function(Y, proximity) {
 }
 
 # ------ newer section
-Negative_Likelihood = function(parameters, Y, proximity) {
-  p = parameters[1]
-  tau = parameters[2]
-  standardized_proximity = Proximity_standardize(proximity)
-  rowSums_vector = rowSums(proximity)
-  I = diag(nrow(proximity))
-  equation = (log(det(solve(tau^-2 * diag(rowSums_vector) %*% (I - (p * standardized_proximity))))))
-  return(equation)
+Negative_Likelihood = function(Y, proximity) {
+  function(parameters) {
+    standardized_proximity = Proximity_standardize(proximity)
+    rowSums_vector = rowSums(proximity)
+    I = diag(nrow(proximity))
+    p = parameters[1]
+    tau = parameters[2]
+    equation = log(abs(det(solve(tau^-2 * diag(rowSums_vector) %*% (I - (p * standardized_proximity))))))
+    return(equation)
+  }
 }
 
 Maximum_Likelihood = function(Y, proximity) {
   p = Calculate_initial_p(Y, proximity)
   tau = Calculate_initial_tau(Y, proximity)
-  parameters = c(p, tau)
-  Negative_LL = Negative_Likelihood(parameters,Y,proximity)
-  nlm_output = nlm(Negative_LL, p = parameters)
+  initial_values = c(0,0)
+  initial_values[1] = p
+  initial_values[2] = tau
+  nlm_output = nlm(Negative_Likelihood, p = initial_values)
   optimized_p_tau = nlm_output$estimate
   return(optimized_p_tau)
 }
-?nlm
+
+
 
