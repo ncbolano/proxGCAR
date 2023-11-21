@@ -76,6 +76,7 @@ Calculate_initial_p = function(Y,proximity) {
   }
   return(p)
 }
+
 #Calculate_mu = function(Y,proximity) {
 #  standardized_proximity = Proximity_standardize(proximity)
 #  p = Calculate_initial_p(Y,proximity)
@@ -83,13 +84,26 @@ Calculate_initial_p = function(Y,proximity) {
 #  return(mu)
 #}
 
+#Calculate_initial_tau = function(Y, proximity){
+#  tau = 0
+#  rowSums_vector = rowSums(proximity)
+#  standardized_proximity = Proximity_standardize(proximity)
+#  p = Calculate_initial_p(Y,proximity)
+#  mu = Calculate_mu(Y,proximity)
+#  tau = sqrt((1/length(Y)) * sum(rowSums_vector * (Y - mu)^2))
+#  return(tau)
+#}
+
 Calculate_initial_tau = function(Y, proximity){
   tau = 0
   rowSums_vector = rowSums(proximity)
   standardized_proximity = Proximity_standardize(proximity)
+  rowSums_vector_std = rowSums(standardized_proximity)
   p = Calculate_initial_p(Y,proximity)
-  mu = Calculate_mu(Y,proximity)
-  tau = sqrt((1/length(Y)) * sum(rowSums_vector * (Y - mu)^2))
+  mu = Calculate_mu(Y)
+  Y_adj = Y - mu
+  tau_sq = (1/length(Y)) * sum(rowSums_vector  * (Y_adj - (p * sum(rowSums_vector_std * (Y_adj))))^2)
+  tau = sqrt(tau_sq)
   return(tau)
 }
 
@@ -109,7 +123,8 @@ Calculate_Yt_Sigma_Y = function(Y, proximity) {
   mu = Calculate_mu(Y, proximity)
   tau = Calculate_initial_tau(Y, proximity)
   Sigma = Calculate_sigma_matrix(Y, proximity)
-  Yt_Sigma_Y = t((Y - mu)) %*% solve(Sigma) %*% (Y - mu)
+  Y_adj = Y - mu
+  Yt_Sigma_Y = t(Y_adj) %*% solve(Sigma) %*% (Y_adj)
   return(Yt_Sigma_Y)
 }
 
@@ -135,7 +150,12 @@ Negative_Likelihood = function(Y, proximity) {
     I = diag(nrow(proximity))
     p = parameters[1]
     tau = parameters[2]
-    equation = log(abs(det(tau^-2 * diag(rowSums_vector) %*% (I - (p * standardized_proximity)))))
+    #equation = log(abs(det(tau^-2 * diag(rowSums_vector) %*% (I - (p * standardized_proximity)))))
+    equation_1 = log(abs(tau)^2)
+    equation_2 = log(abs(det(I - p * standardized_proximity)))
+    Calculate_sigma_matrix(Y, proximity)
+    equation_3 = t(Y - mu) * solve(sigma)
+    equation = equation_1 - equation_2 + equation_3
     return(equation)
   }
 }
