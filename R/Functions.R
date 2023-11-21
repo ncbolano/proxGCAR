@@ -120,7 +120,7 @@ Calculate_sigma_matrix = function(Y, proximity){
 
 Calculate_Yt_Sigma_Y = function(Y, proximity) {
   p = Calculate_initial_p(Y, proximity)
-  mu = Calculate_mu(Y, proximity)
+  mu = Calculate_mu(Y)
   tau = Calculate_initial_tau(Y, proximity)
   Sigma = Calculate_sigma_matrix(Y, proximity)
   Y_adj = Y - mu
@@ -154,7 +154,7 @@ Negative_Likelihood = function(Y, proximity) {
     equation_1 = log(abs(tau)^2)
     equation_2 = log(abs(det(I - p * standardized_proximity)))
     Calculate_sigma_matrix(Y, proximity)
-    equation_3 = t(Y - mu) * solve(sigma)
+    equation_3 = Calculate_Yt_Sigma_Y(Y, proximity)
     equation = equation_1 - equation_2 + equation_3
     return(equation)
   }
