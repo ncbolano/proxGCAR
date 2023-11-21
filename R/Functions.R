@@ -47,6 +47,7 @@ Proximity_standardize = function(proximity) {
 }
 Calculate_mu = function(Y) {
   mu = sum(Y) / length(Y)
+  return(mu)
 }
 
 #Calculate_initial_p = function(Y,proximity) {
@@ -154,7 +155,8 @@ Negative_Likelihood = function(Y, proximity) {
     equation_1 = log(abs(tau)^2)
     equation_2 = log(abs(det(I - p * standardized_proximity)))
     Calculate_sigma_matrix(Y, proximity)
-    equation_3 = Calculate_Yt_Sigma_Y(Y, proximity)
+    #equation_3 = Calculate_Yt_Sigma_Y(Y, proximity)
+    equation_3 = t(Y - mu) %*% solve(Sigma) %*% (Y_adj)
     equation = equation_1 - equation_2 + equation_3
     return(equation)
   }
