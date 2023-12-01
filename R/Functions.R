@@ -89,15 +89,10 @@ Calculate_initial_p = function(Y,proximity) {
 #}
 
 Calculate_initial_tau = function(Y, proximity){
-  rowSums_vector = rowSums(proximity)
-  standardized_proximity = Proximity_standardize(proximity)
-  rowSums_vector_std = rowSums(standardized_proximity)
-  p = Calculate_initial_p(Y,proximity)
-  mu = Calculate_mu(Y)
-  Y_adj = Y - mu
-  tau_sq = (1/length(Y)) * sum(rowSums_vector  * (Y_adj - (p * sum(rowSums_vector_std * (Y_adj))))^2)
-  tau = sqrt(tau_sq)
-  return(tau)
+  rowsums_v = rowSums(proximity)
+  c = (a - (LS_p * b))
+  tau_est = sqrt(rowsums_v %*% (c^2) / n)
+  return(tau_sq)
 }
 
 Calculate_sigma_matrix = function(Y, proximity){
