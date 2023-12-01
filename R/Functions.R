@@ -63,20 +63,12 @@ Calculate_mu = function(Y) {
 #  }
 #  return(p)
 #}
+
 Calculate_initial_p = function(Y,proximity) {
-  Y = as.vector(Y)
-  standardized_proximity = Proximity_standardize(proximity)
-  p = 0
-  learning_rate = .01
-  iterations = 100
-  for (i in 1:iterations) {
-    Y_adj = Y - mu
-    sum = standardized_proximity %*% Y_adj
-    derivative = -2 * t(Y_adj - (p * sum)) %*% sum
-    derivative = as.numeric(derivative)
-    p = p - (learning_rate * derivative)
-  }
-  return(p)
+  a = Y - mu
+  b = Proximity_std %*% a
+  LS_p = (t(a) %*% b)/(t(b) %*% b)
+  return(LS_p)
 }
 
 #Calculate_mu = function(Y,proximity) {
@@ -97,7 +89,6 @@ Calculate_initial_p = function(Y,proximity) {
 #}
 
 Calculate_initial_tau = function(Y, proximity){
-  tau = 0
   rowSums_vector = rowSums(proximity)
   standardized_proximity = Proximity_standardize(proximity)
   rowSums_vector_std = rowSums(standardized_proximity)
@@ -116,7 +107,6 @@ Calculate_sigma_matrix = function(Y, proximity){
   p = Calculate_initial_p(Y,proximity)
   tau = Calculate_initial_tau(Y,proximity)
   Sigma_inv = tau^-2 * diag(rowSums_vector) %*% (I - (p * standardized_proximity)) # By remark 4.3.2
-  Sigma = solve(Sigma_inv)
   return(Sigma_inv)
 }
 
@@ -147,18 +137,20 @@ Negative_Log_Likelihood = function(Y, proximity) {
 # ------ newer section
 Negative_Likelihood = function(Y, proximity) {
   function(parameters) {
+    ## Initializing standardized proximity matrix
     standardized_proximity = Proximity_standardize(proximity)
+    ## Initializing rowSums of non-standardized matrix
     rowSums_vector = rowSums(proximity)
+    ## Initializing Identity matrix
     I = diag(nrow(proximity))
     p = parameters[1]
     tau = parameters[2]
+    ## Initializing mu
     mu = Calculate_mu(Y)
-    Sigma = Calculate_sigma_matrix(Y, proximity)
     #equation = log(abs(det(tau^-2 * diag(rowSums_vector) %*% (I - (p * standardized_proximity)))))
-    equation_1 = log(abs(tau)^2)
-    equation_2 = log(abs(det(I - (p * standardized_proximity))))
-    Calculate_sigma_matrix(Y, proximity)
-    equation_3 = t(Y - mu) %*% solve(Sigma) %*% (Y - mu)
+    equation_1 = log((tau)^2)
+    equation_2 = log(abs(det(I - p * standardized_proximity)))
+    equation_3 = t(Y - mu) %*% (tau^-2 * diag(rowSums_vector) %*% (I - (p * standardized_proximity))) %*% (Y - mu)
     equation = equation_1 - equation_2 + equation_3
     return(equation)
   }
