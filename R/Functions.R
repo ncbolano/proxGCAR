@@ -71,23 +71,6 @@ Calculate_initial_p = function(Y,proximity) {
   return(LS_p)
 }
 
-#Calculate_mu = function(Y,proximity) {
-#  standardized_proximity = Proximity_standardize(proximity)
-#  p = Calculate_initial_p(Y,proximity)
-#  mu = p * ((standardized_proximity) %*% Y)
-#  return(mu)
-#}
-
-#Calculate_initial_tau = function(Y, proximity){
-#  tau = 0
-#  rowSums_vector = rowSums(proximity)
-#  standardized_proximity = Proximity_standardize(proximity)
-#  p = Calculate_initial_p(Y,proximity)
-#  mu = Calculate_mu(Y,proximity)
-#  tau = sqrt((1/length(Y)) * sum(rowSums_vector * (Y - mu)^2))
-#  return(tau)
-#}
-
 Calculate_initial_tau = function(Y, proximity){
   rowsums_v = rowSums(proximity)
   c = (a - (LS_p * b))
