@@ -68,7 +68,7 @@ Calculate_initial_p = function(Y,proximity) {
   a = Y - mu
   b = Proximity_std %*% a
   LS_p = (t(a) %*% b)/(t(b) %*% b)
-  as.numeric(LS_p)
+  LS_p = as.numeric(LS_p)
   return(LS_p)
 }
 
@@ -77,6 +77,7 @@ Calculate_initial_tau = function(Y, proximity){
   c = (a - (LS_p * b))
   tau_sq_est = sqrt(rowsums_v %*% (c^2) / n)
   tau = sqrt(tau_sq_est)
+  tau = as.numeric(tau)
   return(tau)
 }
 
@@ -116,24 +117,28 @@ Negative_Log_Likelihood = function(Y, proximity) {
 
 # ------ newer section
 Negative_Likelihood = function(Y, proximity) {
-  function(parameters) {
-    ## Initializing standardized proximity matrix
-    standardized_proximity = Proximity_standardize(proximity)
-    ## Initializing rowSums of non-standardized matrix
-    rowSums_vector = rowSums(proximity)
-    ## Initializing Identity matrix
-    I = diag(nrow(proximity))
-    p = parameters[1]
-    tau = parameters[2]
-    ## Initializing mu
-    mu = Calculate_mu(Y)
-    #equation = log(abs(det(tau^-2 * diag(rowSums_vector) %*% (I - (p * standardized_proximity)))))
-    equation_1 = log(abs(tau)^2)
-    equation_2 = log(abs(det(I - p * standardized_proximity)))
-    equation_3 = t(Y - mu) %*% (tau^-2 * diag(rowSums_vector) %*% (I - (p * standardized_proximity))) %*% (Y - mu)
-    equation = equation_1 - equation_2 + equation_3
+  ## Initializing standardized proximity matrix
+  standardized_proximity = Proximity_standardize(proximity)
+  ## Initializing rowSums of non-standardized matrix
+  rowSums_vector = rowSums(proximity)
+  ## Initializing Identity matrix
+  I = diag(nrow(proximity))
+
+  f = function(p, tau) {
+    l1 = log(abs(tau^2))
+    l1 = as.numeric(l1)
+
+    I_pW = I - p * standardized_proximity
+    l2 = log(abs(det(I_pW)))
+
+    sum3 = sum((a - p * b) * (a * rowSums_vector))
+    l3 = (tau ^ -2) * sum3
+    l3 = as.numeric(l3)
+
+    equation = l1 - l2 + l3
     return(equation)
   }
+  return(f)
 }
 
 Maximum_Likelihood = function(Y, proximity) {
@@ -143,7 +148,7 @@ Maximum_Likelihood = function(Y, proximity) {
   initial_values[1] = p
   initial_values[2] = tau
   Objective_function = Negative_Likelihood(Y, proximity)
-  nlm_output = nlm(Objective_function, p = initial_values)
+  nlm_output = nlm(Objective_function, initial_values)
   optimized_p_tau = nlm_output$estimate
   return(optimized_p_tau)
 }
