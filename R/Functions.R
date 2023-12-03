@@ -72,10 +72,11 @@ Calculate_initial_p = function(Y,proximity) {
 }
 
 Calculate_initial_tau = function(Y, proximity){
-  rowsums_v = rowSums(proximity)
+  rowsums_v = rowSums(adj_matrix)
   c = (a - (LS_p * b))
-  tau_est = sqrt(rowsums_v %*% (c^2) / n)
-  return(tau_sq)
+  tau_sq_est = sqrt(rowsums_v %*% (c^2) / n)
+  tau = sqrt(tau_sq_est)
+  return(tau)
 }
 
 Calculate_sigma_matrix = function(Y, proximity){
