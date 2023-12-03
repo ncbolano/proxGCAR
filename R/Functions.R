@@ -68,6 +68,7 @@ Calculate_initial_p = function(Y,proximity) {
   a = Y - mu
   b = Proximity_std %*% a
   LS_p = (t(a) %*% b)/(t(b) %*% b)
+  as.numeric(LS_p)
   return(LS_p)
 }
 
@@ -127,7 +128,7 @@ Negative_Likelihood = function(Y, proximity) {
     ## Initializing mu
     mu = Calculate_mu(Y)
     #equation = log(abs(det(tau^-2 * diag(rowSums_vector) %*% (I - (p * standardized_proximity)))))
-    equation_1 = log((tau)^2)
+    equation_1 = log(abs(tau)^2)
     equation_2 = log(abs(det(I - p * standardized_proximity)))
     equation_3 = t(Y - mu) %*% (tau^-2 * diag(rowSums_vector) %*% (I - (p * standardized_proximity))) %*% (Y - mu)
     equation = equation_1 - equation_2 + equation_3
