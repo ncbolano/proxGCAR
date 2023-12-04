@@ -73,6 +73,7 @@ Calculate_initial_p = function(Y,proximity) {
 
 Calculate_initial_tau = function(Y,proximity,LS_p){
 
+  mu = Calculate_mu(Y)
   a = Y - mu
   b = Proximity_std %*% a
 
@@ -98,21 +99,21 @@ Negative_Likelihood = function(params, proximity) {
   ## Initializing Identity matrix
   I = diag(nrow(proximity))
 
-  p = params[1]
+  LS_p = params[1]
   tau = params[2]
-  print(params)
   a = Y - mu
   b = proximity %*% a
   if (abs(params[1]) < 1) {
 
-    l1 = log(abs(tau^2))
+    l1 = n * log(abs(tau^2))
     l1 = as.numeric(l1)
 
-    I_pW = I - p * standardized_proximity
+    I_pW = I - LS_p * standardized_proximity
     l2 = log(abs(det(I_pW)))
 
-    sum3 = sum((a - (p * standardized_proximity %*% a)) * (a * rowSums_vector))
+    sum3 = sum((a - (LS_p * standardized_proximity %*% a)) * (a * rowSums_vector))
     l3 = (1/(tau^2)) * sum3
+
     l3 = as.numeric(l3)
 
     equation = l1 - l2 + l3
@@ -125,18 +126,24 @@ Negative_Likelihood = function(params, proximity) {
 
 Maximum_Likelihood = function(Y, proximity) {
 
+  mu = Calculate_mu(Y)
+
   LS_p = Calculate_initial_p(Y, proximity)
 
   tau = Calculate_initial_tau(Y, proximity, LS_p)
 
   initial_values = c(LS_p,tau)
 
-  nlm_output = nlm(Negative_Likelihood, initial_values, proximity = proximity, stepmax = .05)
+  nlm_output = nlm(Negative_Likelihood, initial_values, proximity = proximity, hessian = TRUE)
 
   optimized_p_tau = nlm_output$estimate
 
   return(list(optimized_p_tau, LS_p, tau))
 }
+
+# Variance associated with estimator
+
+
 
 
 
