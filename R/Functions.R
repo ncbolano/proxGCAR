@@ -58,16 +58,23 @@ Calculate_mu = function(Y) {
 
 Calculate_initial_p = function(Y,proximity) {
 
+  mu = Calculate_mu(Y)
+  rowSums_vector = rowSums(proximity)
+  proximity_std = (proximity / rowSums_vector)
+
   a = Y - mu
   b = Proximity_std %*% a
 
   LS_p = (t(a) %*% b)/(t(b) %*% b)
   LS_p = as.numeric(LS_p)
 
-  return(LS_p) # add tau
+  return(LS_p)
 }
 
-Calculate_initial_tau = function(Y, proximity,LS_p){
+Calculate_initial_tau = function(Y,proximity,LS_p){
+
+  a = Y - mu
+  b = Proximity_std %*% a
 
   rowsums_v = rowSums(proximity)
   c = (a - (LS_p * b))
@@ -91,38 +98,43 @@ Negative_Likelihood = function(params, proximity) {
   ## Initializing Identity matrix
   I = diag(nrow(proximity))
 
-  f = function(params) {
-    p = params[1]
-    tau = params[2]
-    print(params)
-    if (abs(params[1]) < 1) {
-      l1 = log(abs(tau^2))
-      l1 = as.numeric(l1)
+  p = params[1]
+  tau = params[2]
+  print(params)
+  a = Y - mu
+  b = proximity %*% a
+  if (abs(params[1]) < 1) {
 
-      I_pW = I - p * standardized_proximity
-      l2 = log(abs(det(I_pW)))
+    l1 = log(abs(tau^2))
+    l1 = as.numeric(l1)
 
-      sum3 = sum((a - (p * b)) * (a * rowSums_vector))
-      l3 = 1/(tau^2) * sum3
-      l3 = as.numeric(l3)
+    I_pW = I - p * standardized_proximity
+    l2 = log(abs(det(I_pW)))
 
-      equation = l1 - l2 + l3
-      return(equation)
-    }
-    else {
-      return(1e10)
-    }
+    sum3 = sum((a - (p * standardized_proximity %*% a)) * (a * rowSums_vector))
+    l3 = 1/(tau^2) * sum3
+    l3 = as.numeric(l3)
+
+    equation = l1 - l2 + l3
+    return(equation)
   }
-  return(f(params))
+  else {
+    return(1e10)
+  }
 }
 
 Maximum_Likelihood = function(Y, proximity) {
+
   LS_p = Calculate_initial_p(Y, proximity)
-  tau = Calculate_initial_tau(Y, proximity)
+
+  tau = Calculate_initial_tau(Y, proximity, LS_p)
+
   initial_values = c(LS_p,tau)
-  Objective_function = Negative_Likelihood(Y, proximity)
-  nlm_output = nlm(Objective_function, initial_values)
+
+  nlm_output = nlm(Negative_Likelihood, initial_values, proximity = proximity)
+
   optimized_p_tau = nlm_output$estimate
+
   return(optimized_p_tau)
 }
 
