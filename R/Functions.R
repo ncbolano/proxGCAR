@@ -112,7 +112,7 @@ Negative_Likelihood = function(params, proximity) {
     l2 = log(abs(det(I_pW)))
 
     sum3 = sum((a - (p * standardized_proximity %*% a)) * (a * rowSums_vector))
-    l3 = 1/(tau^2) * sum3
+    l3 = (1/(tau^2)) * sum3
     l3 = as.numeric(l3)
 
     equation = l1 - l2 + l3
@@ -131,12 +131,18 @@ Maximum_Likelihood = function(Y, proximity) {
 
   initial_values = c(LS_p,tau)
 
-  nlm_output = nlm(Negative_Likelihood, initial_values, proximity = proximity)
+  nlm_output = nlm(Negative_Likelihood, initial_values, proximity = proximity, stepmax = .05)
 
   optimized_p_tau = nlm_output$estimate
 
-  return(optimized_p_tau)
+  return(list(optimized_p_tau, LS_p, tau))
 }
+
+
+
+
+
+
 
 
 Calculate_sigma_matrix = function(Y, proximity){
@@ -173,3 +179,4 @@ Negative_Log_Likelihood = function(Y, proximity) {
   return(Negative_LL)
 }
 
+?nlm
