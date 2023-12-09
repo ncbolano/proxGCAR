@@ -1,7 +1,8 @@
 #' Computes the Maximum Likelihood Estimators for a Gaussian CAR model and their variances
 #' @param Y A nx1 vector that represents an singular observation of
 #' @param proximity A proximity matrix
-#' @return A matrix of LS_estimators , MLE's , and MLE variances for rho(p),tau,mu
+#' @return A matrix of LS_estimators , MLE's , and MLE variances for rho(p) , tau , mu
+#' @export
 Maximum_Likelihood = function(Y, proximity) {
 
   proximity_std = Proximity_standardize(proximity)
