@@ -19,18 +19,6 @@ Example Code: Running Maximum_Likelihood after generating data that truly follow
 install.packages("mvtnorm")
 ```
 
-```
-## Installing package into 'C:/Users/noahb/AppData/Local/R/win-library/4.2'
-## (as 'lib' is unspecified)
-```
-
-```
-## package 'mvtnorm' successfully unpacked and MD5 sums checked
-## 
-## The downloaded binary packages are in
-## 	C:\Users\noahb\AppData\Local\Temp\RtmpgNE4nd\downloaded_packages
-```
-
 ```r
 library(mvtnorm)
 
@@ -87,10 +75,6 @@ Y = rmvnorm(1, mean = rep(mu, nrow(sigma)), sigma)
 Y = t(Y)
 
 Maximum_Likelihood(Y,proximity)
-```
-
-```
-## Error in Maximum_Likelihood(Y, proximity): could not find function "Maximum_Likelihood"
 ```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
