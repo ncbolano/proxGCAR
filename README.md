@@ -50,7 +50,7 @@ Proximity_standardize = function(proximity) {
 Proximity_std = Proximity_standardize(proximity)
 
 
-# C Choosing p and t
+# C Choosing mu , p and t (Can be changed)
 mu = 50
 p = .8
 tau = 5
@@ -73,6 +73,8 @@ sigma = tau^2 * inv_term %*% D
 # E Generating data
 Y = rmvnorm(1, mean = rep(mu, nrow(sigma)), sigma)
 Y = t(Y)
+
+# Now that we have a valid proximity matrix and a Y vector, we can run our function
 
 Maximum_Likelihood(Y,proximity)
 ```
