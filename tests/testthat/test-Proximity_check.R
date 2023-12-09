@@ -23,8 +23,10 @@ test_that("Proximity_setup handles matrices correctly", {
   # Test 6 - 8 : (Given valid matrices)
   proximity6 = matrix(c(0,1,1,0), nrow = 2, byrow = TRUE)
   expect_silent(Proximity_check(proximity6))
+
   proximity7 = matrix(c(0,1,1,1,0,1,1,1,0), nrow = 3, byrow = TRUE)
   expect_silent(Proximity_check(proximity7))
+
   proximity8 = matrix(c(0,1,0,1,1,0,1,0,0,1,0,1,1,0,1,0), nrow = 4, byrow = TRUE)
   expect_silent(Proximity_check(proximity8))
 })
