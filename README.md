@@ -1,6 +1,5 @@
 ---
 title: "proxGCAR"
-output: html_notebook
 ---
 Maximum Likelihood Estimation for a Gaussian Conditionally Autoregressive Model
 
