@@ -1,6 +1,6 @@
-#' Computes the Maximum Likelihood Estimators for a Gaussian CAR model and their variances
-#' @param Y A nx1 vector that represents an singular observation of
-#' @param proximity A proximity matrix
+#' Computes the Maximum Likelihood Estimators (mu,rho,tau) for a Gaussian CAR model and their associated Variances. Returns these estimates alongside calculated Least Squares estimates for the data.
+#' @param Y An nx1 vector that represents an singular observation of
+#' @param proximity A matrix with a neighboring proximity structure
 #' @return A matrix of LS_estimators , MLE's , and MLE variances for rho(p) , tau , mu
 #' @export
 Maximum_Likelihood = function(Y, proximity) {
