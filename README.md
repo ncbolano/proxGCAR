@@ -3,14 +3,26 @@
 ---
 Maximum Likelihood Estimation for a Gaussian Conditionally Autoregressive Model
 
-Regional data often follows spatial trends, as correlations between areas tend to be stronger when closer in proximity. A classical approach to analyzing data is through construction of a proximity/(adjacency) matrix. The standard method is the neighboring proximity matrix, where we set wi,j = 1 if Ai and Aj share a common boundary, else let wi,j = 0. A variant on the idea, which will be used in the context of this project is to standardize W with its row sum.
+Regional data often follows spatial trends, as correlations between areas tend to be stronger when closer in proximity. A classical approach to analyzing data is through construction of a proximity/(adjacency) matrix. The standard method is the neighboring proximity matrix, where we set the proximity matrix's i,jth entry = 1 if region I and J share a boundary, and 0 otherwise. A variant on the idea, which will be used is to standardize W with its row sum.
 
-The joint distribution of our Gaussian CAR in the context of our problem is :
+The conditional distribution of our model is :
+
+``` math
+\begin{equation}
+Y_i \sim N\left(\rho \sum_{j=1}^{6 \neq i} \tilde{w}_{i,j} Y_j, \tau^2_i\right)
+\end{equation}
+```
+
+The joint distribution of our model in the context of our problem is :
 
 ``` math 
 Y \sim \text{MVN}\left( \mu_{1n}, \left( \mathbf{I}_n - \rho \tilde{W} \right)^{-1} {\tau^2 \text{diag}\left( w^{-1}_1, +, w^{-1}_2, +, \ldots, w^{-1}_n, + \right)} \right)
 ```
-where mu is some common mean term, 
+Thus , the parameters we seek to estimate for the models are as follows : 
+Mu, the common mean term for the joint distribution.
+Rho(p), a scalar value that represents the strength of conditional dependency on adjacent regions.
+Tau, the square root of .
+
 This package conducts maximum likelihood estimation to estimate the three parameters (mu , rho , tau) of a Gaussian CAR model. Provided with an Nx1 vector of observations, and a valid proximity matrix corresponding to the regional structure of the data, it computes the Least Squared estimators. Then, these LS estimators are utilized as warm starting values to iterate through our negative likelihood function and find optimal MLE parameters. Finally, it analyzes the inverse hessian to relay the variance of each of our MLE's. proxGCAR returns a 3x3 matrix of the LS estimators , MLE's , and corresponding MLE variances. 
 
 Example Code: Running Maximum_Likelihood after generating data that truly follows a Gaussian CAR with a valid proximity matrix (Requires install of package mvtnorm for data generation)
