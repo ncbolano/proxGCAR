@@ -20,7 +20,7 @@ Negative_Likelihood = function(params, proximity, Y) {
   tau = params[2]
   mu = params[3]
 
-  # Defining a as standardized Y value
+  # Defining Y_std as standardized Y value
   Y_std = Y - mu
   # Defining b as the proximity matrix multiplied by standardized Y vector
   b = proximity %*% Y_std

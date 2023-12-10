@@ -30,6 +30,7 @@ Calculate_initial_p = function(Y, proximity, mu, Proximity_std) {
 
   return(LS_p)
 }
+
 #' Calculates the Least Squares estimate of tau
 #' @param Y A nx1 vector that represents an observation of our data
 #' @param proximity A proximity matrix
@@ -40,13 +41,16 @@ Calculate_initial_p = function(Y, proximity, mu, Proximity_std) {
 #' @noRd
 Calculate_initial_tau = function(Y,proximity,LS_p,mu,Proximity_std){
 
-  # mu = Calculate_mu(Y)
-  a = Y - mu
-  b = Proximity_std %*% a
+  # Defining Y_std as standardized Y value
+  Y_std = Y - mu
+  # Defining b as the proximity matrix multiplied by standardized Y vector
+  b = Proximity_std %*% Y_std
 
   rowsums_proximity = rowSums(proximity)
-  c = (a - (LS_p * b))
+  # Defining c to represent Y_std - Y_std estimates
+  c = (Y_std - (LS_p * b))
 
+  # Computing LS for tau^2
   tau_sq_est = sum(rowsums_proximity * (c^2))/nrow(proximity)
   tau = sqrt(tau_sq_est)
   tau = as.numeric(tau)
