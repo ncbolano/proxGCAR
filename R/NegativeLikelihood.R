@@ -3,7 +3,7 @@
 #' @param proximity A proximity matrix
 #' @return A numeric value representing the value of negative likelihood
 #' @noRd
-Negative_Likelihood = function(params, proximity) {
+Negative_Likelihood = function(params, proximity, Y) {
 
   ## Initializing standardized proximity matrix
   standardized_proximity = Proximity_standardize(proximity)
@@ -28,7 +28,7 @@ Negative_Likelihood = function(params, proximity) {
   if (abs(params[1]) < 1) {
 
     # First term of negative log likelihood function as defined in readme
-    l1 = n * log(abs(tau^2))
+    l1 = nrow(proximity) * log(abs(tau^2))
     l1 = as.numeric(l1)
 
     # Second term of negative log likelihood function as defined in readme

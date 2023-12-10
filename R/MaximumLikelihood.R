@@ -16,7 +16,7 @@ Maximum_Likelihood = function(Y, proximity) {
   initial_values = c(LS_p,tau,mu)
 
   # NLM is a function which is a part of the Stats package. It iterates through the negative log likelihood function given a set of parameters
-  nlm_output = nlm(Negative_Likelihood, initial_values, proximity = proximity, hessian = TRUE)
+  nlm_output = nlm(Negative_Likelihood, initial_values, proximity = proximity, Y = Y, hessian = TRUE)
 
   # Grabbing the mu , tau , rho(p) from the nlm_output
   optimized_mu_p_tau = nlm_output$estimate
