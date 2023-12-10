@@ -3,7 +3,6 @@
 
 ## usethis namespace: start
 
-#' @importFrom mvtnorm rmvnorm
 #' @importFrom stats nlm
 ## usethis namespace: end
 NULL

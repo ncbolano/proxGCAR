@@ -18,14 +18,15 @@ Y \sim \text{MVN}\left( \mu_{1n}, \left( \mathbf{I}_n - \rho \tilde{W} \right)^{
 ```
 Thus , the parameters we seek to estimate for the models are as follows : 
 Mu, the common mean term for the joint distribution.
-Rho(p), a scalar value that represents the strength of conditional dependency on adjacent regions.
-Tau, A scalar value representing the square root of the variance of the conditional models. 
+Rho(p): a scalar value that represents the strength of conditional dependency on adjacent regions.
+Tau: A scalar value representing the square root of the conditional model variance * the sum of the corresponding row of the proximity matrix. (Shown below)
 
 ``` math
 \sqrt{\tau^2_i \cdot w_{i,+}}
 ```
 
-This package conducts maximum likelihood estimation to estimate the three parameters (mu , rho , tau) of a Gaussian CAR model. Provided with an Nx1 vector of observations, and a valid proximity matrix corresponding to the regional structure of the data, it computes the Least Squared estimators. Then, these LS estimators are utilized as warm starting values to iterate through our negative likelihood function and find optimal MLE parameters. Finally, it analyzes the inverse hessian to relay the variance of each of our MLE's. proxGCAR returns a 3x3 matrix of the LS estimators , MLE's , and corresponding MLE variances. 
+This package conducts maximum likelihood estimation to estimate the three parameters (mu , rho , tau) of a Gaussian CAR model. Provided with an Nx1 vector of observations, and a valid proximity matrix corresponding to the regional structure of the data, it computes the Least Squared estimators. Then, these LS estimators are utilized as warm starting values to iterate through our negative likelihood function and find optimal MLE parameters. Finally, it analyzes the inverse hessian to relay the variance of each of our MLE's. proxGCAR returns a 3x3 matrix of the LS estimators , MLE's , and corresponding MLE variances. For more information about the model and parameters, refer to ReadME, found here.
+
 
 Example Code: Running Maximum_Likelihood after generating data that truly follows a Gaussian CAR with a valid proximity matrix (Requires install of package mvtnorm for data generation)
 

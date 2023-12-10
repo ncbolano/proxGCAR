@@ -4,16 +4,7 @@ Title: Gaussian Conditional Autoregressive MLE
 Version: 0.1.0
 Author: Noah Bolanos
 Maintainer: <ncbolano@tamu.edu>
-Description: This package conducts maximum likelihood estimation to estimate 
-the three parameters (mu , rho , tau) of a Gaussian CAR model. Provided with 
-an Nx1 vector of observations, and a valid proximity matrix corresponding to 
-the regional structure of the data, it computes the Least Squared estimators. 
-Then, these LS estimators are utilized as warm starting values to iterate 
-through our negative likelihood function and find optimal MLE parameters. 
-Finally, it analyzes the inverse hessian to relay the variance of each of 
-our MLE's. proxGCAR returns a 3x3 matrix of the LS estimators , MLE's , 
-and corresponding MLE variances. For more information about the model and 
-parameters, refer to ReadME, found here.
+Description: This package conducts maximum likelihood estimation to estimate the three parameters (mu , rho , tau) of a Gaussian CAR model. Provided with an Nx1 vector of observations, and a valid proximity matrix corresponding to the regional structure of the data, it computes the Least Squared estimators. Then, these LS estimators are utilized as warm starting values to iterate through our negative likelihood function and find optimal MLE parameters. Finally , it analyzes the inverse hessian to relay the variance of each of our MLE's. proxGCAR returns a 3x3 matrix of the LS estimators , MLE's , and corresponding MLE variances. For more information about the model and parameters, refer to ReadME, found here.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
