@@ -2,18 +2,18 @@
 % Please edit documentation in R/MaximumLikelihood.R
 \name{Maximum_Likelihood}
 \alias{Maximum_Likelihood}
-\title{Computes the Maximum Likelihood Estimators for a Gaussian CAR model and their variances}
+\title{Computes the Maximum Likelihood Estimators (mu,rho,tau) for a Gaussian CAR model and the estimator's associated Variances. Returns these estimates alongside calculated Least Squares estimates.}
 \usage{
 Maximum_Likelihood(Y, proximity)
 }
 \arguments{
-\item{Y}{A nx1 vector that represents an singular observation of}
+\item{Y}{An nx1 vector that represents an singular observation of}
 
-\item{proximity}{A proximity matrix}
+\item{proximity}{A matrix with a neighboring proximity structure}
 }
 \value{
 A matrix of LS_estimators , MLE's , and MLE variances for rho(p) , tau , mu
 }
 \description{
-Computes the Maximum Likelihood Estimators for a Gaussian CAR model and their variances
+Computes the Maximum Likelihood Estimators (mu,rho,tau) for a Gaussian CAR model and the estimator's associated Variances. Returns these estimates alongside calculated Least Squares estimates.
 }
