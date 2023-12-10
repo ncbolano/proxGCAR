@@ -20,25 +20,31 @@ Negative_Likelihood = function(params, proximity) {
   tau = params[2]
   mu = params[3]
 
+  # Defining a as Y
   a = Y - mu
   b = proximity %*% a
 
+  # Ensuring rho(p) is between -1 and 1 to ensure that our sigma matrix is Positive Definite
   if (abs(params[1]) < 1) {
 
+    # First term of negative log likelihood function as defined in readme
     l1 = n * log(abs(tau^2))
     l1 = as.numeric(l1)
 
+    # Second term of negative log likelihood function as defined in readme
     I_pW = I - LS_p * standardized_proximity
     l2 = log(abs(det(I_pW)))
 
+    # Final/third term of negative low likelihood function as defined in readme
     sum3 = sum((a - (LS_p * standardized_proximity %*% a)) * (a * rowSums_proximity))
     l3 = (1/(tau^2)) * sum3
-
     l3 = as.numeric(l3)
 
-    equation = l1 - l2 + l3
-    return(equation)
+    # Scalar value obtained from negative log likelihood function with set parameters
+    NLL_value = l1 - l2 + l3
+    return(NLL_value)
   }
+  # If rho not within -1 to 1 , returning a large positive value so the optimization algorithm strays away from those values in future iterations
   else {
     return(1e10)
   }

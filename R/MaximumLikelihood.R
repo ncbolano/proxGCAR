@@ -15,17 +15,22 @@ Maximum_Likelihood = function(Y, proximity) {
 
   initial_values = c(LS_p,tau,mu)
 
+  # NLM is a function which is a part of the Stats package. It iterates through the negative log likelihood function given a set of parameters
   nlm_output = nlm(Negative_Likelihood, initial_values, proximity = proximity, hessian = TRUE)
 
+  # Grabbing the mu , tau , rho(p) from the nlm_output
   optimized_mu_p_tau = nlm_output$estimate
   MLEp = optimized_mu_p_tau[1]
   MLEtau = optimized_mu_p_tau[2]
   MLEmu = optimized_mu_p_tau[3]
-  inv_hessian = solve(nlm_output$hessian)
 
+  # NLM also stores the hessian, which we invert to get variance estimates for our MLE's
+  inv_hessian = solve(nlm_output$hessian)
   MLEp_var = inv_hessian[1,1]
   MLEtau_var = inv_hessian[2,2]
   MLEmu_var = inv_hessian[2,2]
+
+  # Putting our LS , MLE , MLE_VAR into a table and returning it
   data = c(mu, LS_p, tau, MLEmu, MLEp , MLEtau, MLEmu_var , MLEp_var , MLEtau_var)
   mat = matrix(data, nrow = 3, ncol = 3, byrow = TRUE,
                dimnames = list(c("Least Squares", "MLE", "MLE variance"),
