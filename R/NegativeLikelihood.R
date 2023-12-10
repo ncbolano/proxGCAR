@@ -20,23 +20,27 @@ Negative_Likelihood = function(params, proximity, Y) {
   tau = params[2]
   mu = params[3]
 
-  # Defining a as Y
-  a = Y - mu
-  b = proximity %*% a
+  # Defining a as standardized Y value
+  Y_std = Y - mu
+  # Defining b as the proximity matrix multiplied by standardized Y vector
+  b = proximity %*% Y_std
 
   # Ensuring rho(p) is between -1 and 1 to ensure that our sigma matrix is Positive Definite
   if (abs(params[1]) < 1) {
 
     # First term of negative log likelihood function as defined in readme
     l1 = nrow(proximity) * log(abs(tau^2))
+    # l1 is the scalar value of the third term of the NLL
     l1 = as.numeric(l1)
 
     # Second term of negative log likelihood function as defined in readme
     I_pW = I - LS_p * standardized_proximity
+    # l2 is the scalar value of the third term of the NLL
     l2 = log(abs(det(I_pW)))
 
     # Final/third term of negative low likelihood function as defined in readme
-    sum3 = sum((a - (LS_p * standardized_proximity %*% a)) * (a * rowSums_proximity))
+    sum3 = sum((Y_std - (LS_p * standardized_proximity %*% Y_std)) * (Y_std * rowSums_proximity))
+    # l3 is the scalar value of the third term of the NLL
     l3 = (1/(tau^2)) * sum3
     l3 = as.numeric(l3)
 
