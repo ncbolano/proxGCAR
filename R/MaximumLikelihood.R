@@ -3,16 +3,16 @@
 #' @param proximity A matrix with a neighboring proximity structure
 #' @return A matrix of LS_estimators , MLE's , and MLE variances for rho(p) , tau , mu
 #' @export
+#' @example Example with designed (proximity matrix and Y vector) can be located in the readME at https://github.com/ncbolano/proxGCAR
 Maximum_Likelihood = function(Y, proximity) {
+  # Running all of our helper functions
 
   proximity_std = Proximity_standardize(proximity)
-
   mu = Calculate_mu(Y)
-
   LS_p = Calculate_initial_p(Y, proximity,mu , proximity_std)
-
   tau = Calculate_initial_tau(Y, proximity, LS_p, mu, proximity_std)
 
+  # Storing the warm start values for the optimization
   initial_values = c(LS_p,tau,mu)
 
   # NLM is a function which is a part of the Stats package. It iterates through the negative log likelihood function given a set of parameters
