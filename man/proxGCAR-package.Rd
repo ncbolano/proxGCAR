@@ -6,6 +6,6 @@
 \alias{proxGCAR-package}
 \title{proxGCAR: Gaussian Conditional Autoregressive MLE}
 \description{
-More about what it does (maybe more than one line) Use four spaces when indenting paragraphs within the Description.
+This package conducts maximum likelihood estimation to estimate the three parameters (mu , rho , tau) of a Gaussian CAR model. Provided with an Nx1 vector of observations, and a valid proximity matrix corresponding to the regional structure of the data, it computes the Least Squared estimators. Then, these LS estimators are utilized as warm starting values to iterate through our negative likelihood function and find optimal MLE parameters. Finally , it analyzes the inverse hessian to relay the variance of each of our MLE's. proxGCAR returns a 3x3 matrix of the LS estimators , MLE's , and corresponding MLE variances. For more information about the model and parameters, refer to ReadME, found here.
 }
 \keyword{internal}
